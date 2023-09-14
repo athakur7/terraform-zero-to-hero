@@ -69,9 +69,12 @@ resource "aws_security_group" "webSg" {
     Name = "Web-sg"
   }
 }
+resource "random_id" "uuid" {
+  byte_length = 4  # You can adjust the byte length to control the length of the random string
+}
 
 resource "aws_s3_bucket" "example" {
-  bucket = "abhisheksterraform2023project"
+  bucket = "anand-s3-terraform-bucket-${random_id.uuid.hex}"
 }
 
 
