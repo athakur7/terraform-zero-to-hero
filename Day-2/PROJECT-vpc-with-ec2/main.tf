@@ -69,14 +69,22 @@ resource "aws_security_group" "webSg" {
     Name = "Web-sg"
   }
 }
-resource "random_id" "uuid" {
-  byte_length = 4  # You can adjust the byte length to control the length of the random string
-}
+
+# method-1: random uuid for s3 
+# resource "random_id" "uuid" {
+#   byte_length = 4  # You can adjust the byte length to control the length of the random string
+# }
+
+# resource "aws_s3_bucket" "example" {
+#   bucket = "anand-s3-terraform-bucket-${random_id.uuid.hex}"
+# }
+
+#method-2: Retrieve the AWS account ID and append to s3 name
+data "aws_caller_identity" "current" {}
 
 resource "aws_s3_bucket" "example" {
-  bucket = "anand-s3-terraform-bucket-${random_id.uuid.hex}"
+  bucket = "anand-s3-terraform-bucket-${data.aws_caller_identity.current.account_id}"
 }
-
 
 resource "aws_instance" "webserver1" {
   ami                    = "ami-0261755bbcb8c4a84"
